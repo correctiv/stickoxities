@@ -1,0 +1,73 @@
+[
+  {
+    "id": "berlin",
+    "name": "Berlin",
+    "center": [13.408333, 52.518611],
+    "zoom": 9.5,
+    "ags": ["11000"]
+  },
+  {
+    "id": "bremen",
+    "name": "Bremen",
+    "center": [8.807311, 53.075878],
+    "zoom": 11,
+    "ags": ["40110"]
+  },
+  {
+    "id": "koeln",
+    "name": "Köln",
+    "center": [6.956944, 50.938056],
+    "zoom": 9,
+    "ags": ["53150"]
+  },
+  {
+    "id": "stuttgart",
+    "name": "Stuttgart",
+    "center": [9.182778, 48.775556],
+    "zoom": 9,
+    "ags": ["81110"]
+  },
+  {
+    "id": "hamburg",
+    "name": "Hamburg",
+    "center": [9.993333, 53.550556],
+    "zoom": 8,
+    "ags": ["20000"]
+  },
+  {
+    "id": "hamburg-innenstadt",
+    "name": "Hamburg Innenstadt",
+    "center": [9.993333, 53.550556],
+    "zoom": 10,
+    "ags": null,
+    "stationIds": ["DEHH070", "DEHH080", "DEHH068", "DEHH026", "DEHH078", "DEHH064", "DEHH015", "DEHH074", "DEHH079", "DEHH008"]
+  },
+  {
+    "id": "muenchen",
+    "name": "München",
+    "center": [11.575556, 48.137222],
+    "zoom": 10,
+    "ags": ["91620", "91771"]
+  },
+  {
+    "id": "freiburg",
+    "name": "Freiburg",
+    "center": [7.849881, 47.994828],
+    "zoom": 10,
+    "ags": ["83110"]
+  },
+  {
+    "id": "mannheim",
+    "name": "Mannheim",
+    "center": [8.463056, 49.483611],
+    "zoom": 10,
+    "ags": ["82220"]
+  },
+  {
+    "id": "heidelberg",
+    "name": "Heidelberg",
+    "center": [8.71, 49.412222],
+    "zoom": 10,
+    "ags": ["82210"]
+  }
+]

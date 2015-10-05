@@ -1,0 +1,19 @@
+{
+  "name": "geo_multiples",
+  "version": "0.0.0",
+  "authors": [
+    "Stefan Wehrmeyer <mail@stefanwehrmeyer.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/js/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.6"
+  }
+}

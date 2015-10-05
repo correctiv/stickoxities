@@ -1,0 +1,57 @@
+body {
+  margin:0;
+  padding:0;
+  font-family: sans-serif;
+}
+
+.cities {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.city {
+  flex: 0 1 auto;
+  align-self: stretch;
+  margin: 15px;
+}
+
+.city-map {
+  min-width: 300px;
+  min-height: 200px;
+}
+
+
+.sparkline {
+  fill: none;
+  stroke: #000;
+  stroke-width: 0.5px;
+}
+
+.limitline {
+  fill: none;
+  stroke: #f00;
+  stroke-width: 1px;
+}
+
+.x.axis .domain {
+  stroke-width: 0px;
+  stroke: none;
+  fill: none;
+}
+
+.x.axis .tick line {
+  stroke-width: 1px;
+  stroke: #000;
+}
+
+.x.axis .tick text {
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+.mouseline {
+  opacity: 0;
+  stroke: #333;
+  stroke-width: 1px;
+  fill: none;
+}
