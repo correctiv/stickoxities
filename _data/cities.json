@@ -28,6 +28,13 @@
     "ags": ["81110"]
   },
   {
+    "id": "stuttgart-ballungsraum",
+    "name": "Stuttgart Ballungsraum",
+    "center": [9.182778, 48.775556],
+    "zoom": 8,
+    "stationIds": ["DEBW011", "DEBW012", "DEBW013", "DEBW014", "DEBW024", "DEBW025", "DEBW026", "DEBW035", "DEBW042", "DEBW066", "DEBW069", "DEBW099", "DEBW100", "DEBW106", "DEBW116", "DEBW117", "DEBW118", "DEBW119", "DEBW120", "DEBW134", "DEBW139", "DEBW154", "DEBW157", "DEBW196", "DEBW211", "DEBW212", "DEBW214"]
+  },
+  {
     "id": "hamburg",
     "name": "Hamburg",
     "center": [9.993333, 53.550556],
