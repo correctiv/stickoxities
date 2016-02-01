@@ -3,7 +3,7 @@
     "id": "berlin",
     "name": "Berlin",
     "center": [13.408333, 52.518611],
-    "zoom": 9.5,
+    "zoom": 9,
     "ags": ["11000"]
   },
   {

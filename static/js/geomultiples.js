@@ -2,275 +2,6 @@
 window.GeoMultiple = (function(){
   "use strict";
 
-var constants = {
-  // constants["sans"]: "Open Sans Regular, Arial Unicode MS Regular",
-  // constants["sans-it"]: "Open Sans Italic, Arial Unicode MS Regular",
-  // constants["sans-md"]: "Open Sans Semibold, Arial Unicode MS Bold",
-  // constants["sans-bd"]: "Open Sans Bold, Arial Unicode MS Bold",
-  "big-label": "#cb4b49",
-  "medium-label": "#f27a87",
-  "small-label": "#384646",
-  "label-halo": "rgba(255,255,255,0.5)",
-  "label-halo-dark": "rgba(0,0,0,0.2)",
-  "land": "#4a4a4a",
-  "water": "#00697c",
-  "park": "#2b4004",
-  "building": "#afd3d3",
-  "highway": "#5d6765",
-  "road": "#7a7a7a",
-  "railway": "#93a19a",
-  "majorroad": "#7a7a7a",
-  "path": "#5d6765",
-  "subway": "#ef7369",
-  "umweltzone": "#60e86a",
-  "umweltzone-width": {
-    "base": 2.0,
-    "stops": [[4, 1.0], [8, 2.5], [20, 60]]
-  },
-  "highway-width": {
-    "base": 1.55,
-    "stops": [[4, 0.5], [8, 1.5], [20, 40]]
-  },
-  "majorroad-width": {
-    "base": 1.55,
-    "stops": [[4, 0.4], [8, 1.3], [20, 35]]
-  },
-  "railway-width": {
-    "base": 1.55,
-    "stops": [[4, 0.4], [8, 1.3], [20, 35]]
-  },
-  "road-width": {
-    "base": 1.55,
-    "stops": [[4, 0.25], [20, 30]]
-  },
-  "path-width": {
-    "base": 1.8,
-    "stops": [[10, 0.15], [20, 15]]
-  },
-  "road-misc-width": {
-    "base": 1,
-    "stops": [[4, 0.25], [20, 30]]
-  },
-  "stream-width": {
-    "base": 0.5,
-    "stops": [[4, 0.5], [10, 1.5], [20, 5]]
-  }
-};
-
-var simple = {
-  "version": 8,
-  // "glyphs": "mapbox://fontstack/{fontstack}/{range}.pbf",
-  "sources": {
-    "osm": {
-      "type": "vector",
-      "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-rIpIBqg"]
-    }
-  },
-  "layers": [{
-    "id": "background",
-    "type": "background",
-    "paint": {
-      "background-color": constants.land
-    }
-  }, {
-    "id": "water-line",
-    "source": "osm",
-    "source-layer": "water",
-    "type": "line",
-    "filter": ["==", "$type", "LineString"],
-    "paint": {
-      "line-color": constants["water"],
-      "line-width": {
-        "base": 1.2,
-        "stops": [[8, 0.5], [20, 15]]
-      }
-    }
-  }, {
-    "id": "water-polygon",
-    "source": "osm",
-    "source-layer": "water",
-    "type": "fill",
-    "filter": ["==", "$type", "Polygon"],
-    "paint": {
-      "fill-color": constants["water"]
-    }
-  }, {
-    "id": "park",
-    "type": "fill",
-    "source": "osm",
-    "source-layer": "landuse",
-    "min-zoom": 6,
-    "filter": ["in", "kind", "park", "forest", "garden", "grass", "farm", "meadow", "playground", "golf_course", "nature_reserve", "wetland", "wood", "cemetery"],
-    "paint": {
-      "fill-color": constants["park"]
-    }
-  }, {
-    "id": "river",
-    "source": "osm",
-    "source-layer": "water",
-    "type": "line",
-    "min-zoom": 6,
-    "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "river"]],
-    "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-    "paint": {
-      "line-color": constants["water"],
-      "line-width": {
-        "base": 1.2,
-        "stops": [[8, 0.75], [20, 15]]
-      }
-    }
-  }, {
-    "id": "stream-etc",
-    "source": "osm",
-    "source-layer": "water",
-    "type": "line",
-    "min-zoom": 11,
-    "filter": ["all", ["==", "$type", "LineString"], ["in", "kind", "stream", "canal"]],
-    "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-    "paint": {
-      "line-color": constants["water"],
-      "line-width": {
-        "base": 1.4,
-        "stops": [[10, 0.5], [20, 15]]
-      }
-    }
-  }, {
-      "id": "country-boundary",
-      "source": "osm",
-      "source-layer": "places",
-      "type": "line",
-      "filter": ["==", "admin_level", "2"],
-      "max-zoom": 4,
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": constants["building"],
-      "line-width": {
-        "base": 2,
-        "stops": [[1, 0.5], [7, 3]]
-        }
-      }
-    }, {
-      "id": "state-boundary",
-      "source": "osm",
-      "source-layer": "places",
-      "type": "fill",
-      "filter": ["==", "admin_level", "4"],
-      "max-zoom": 10,
-      "layout": {
-        // "line-cap": "round",
-        // "line-join": "round"
-      },
-      "paint": {
-        "fill-color": constants["land"],
-        "fill-outline-color": "#cacecc"
-      }
-  }, {
-    "id": "link-tunnel",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "filter": ["any", ["==", "is_tunnel", "yes"]],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["building"],
-      "line-width": constants["road-width"],
-      "line-dasharray": [1, 2]
-    }
-  }, {
-    "id": "buildings",
-    "type": "fill",
-    "source": "osm",
-    "source-layer": "buildings",
-    "paint": {
-    "fill-outline-color": constants["building"],
-    "fill-color": constants["land"]
-    }
-  }, {
-    "id": "road",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "filter": ["any", ["==", "kind", "minor_road"]],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["road"],
-      "line-width": constants["road-width"]
-    }
-  }, {
-    "id": "major-road",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "filter": ["==", "kind", "major_road"],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["majorroad"],
-      "line-width": constants["majorroad-width"]
-    }
-  }, {
-    "id": "railway",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "filter": ["==", "kind", "rail"],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["railway"],
-      "line-width": constants["railway-width"]
-    }
-  }, {
-    "id": "link-bridge",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "filter": ["any", ["==", "is_link", "yes"], ["==", "is_bridge", "yes"]],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["road"],
-      "line-width": constants["highway-width"]
-    }
-  }, {
-    "id": "highway",
-    "source": "osm",
-    "source-layer": "roads",
-    "type": "line",
-    "line-join": "round",
-    "filter": ["==", "kind", "highway"],
-    "layout": {
-      "line-join": "round",
-      "line-cap": "round"
-    },
-    "paint": {
-      "line-color": constants["highway"],
-      "line-width": constants["highway-width"]
-    }
-  }
-  ]
-};
 
 var makeNum = function(d){
   return +d;
@@ -297,77 +28,53 @@ var GeoMultiple = function(node, config) {
   this.node = node;
   this.width = this.node.offsetWidth;
   this.config = config;
-  var map = this.map = new mapboxgl.Map({
-    container: node.getElementsByClassName("city-map")[0],
-    style: simple,
+
+  // https://cartodb-basemaps-c.global.ssl.fastly.net/dark_nolabels/6/18/23.png
+  var baseLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  });
+
+
+  var map = this.map = L.map(node.getElementsByClassName("city-map")[0], {
+    scrollWheelZoom: false,
+    center: config.center.reverse(),
     zoom: config.zoom,
-    minZoom: 2,
-    center: config.center
+    attributionControl: false,
   });
 
-  map.on("style.load", function () {
-    if (config.umweltzone !== undefined) {
-      map.addSource("umweltzone", {
-          "type": "geojson",
-          "data": config.umweltzone
-      });
+  this.map.addLayer(baseLayer);
+  this.addStationLayer(map);
+};
 
-      map.addLayer({
-          "id": "umweltzone",
-          "type": "line",
-          "source": "umweltzone",
-          "layout": {
-              "line-join": "round",
-              "line-cap": "round"
-          },
-          "paint": {
-              "line-color": constants["umweltzone"],
-              "line-width": constants["umweltzone-width"]
-          }
-      });
-      self.config.dispatcher.on("datechange.umweltzone-" + self.config.id, function(date) {
-          var since = new Date(config.umweltzone.properties.since);
-          if (since <= date) {
-            self.map.setLayoutProperty("umweltzone", "visibility", "visible");
-          } else {
-            self.map.setLayoutProperty("umweltzone", "visibility", "none");
-          }
-      });
-    }
-    if (config.stickoxide !== undefined) {
-      config.stickoxide.stations.forEach(function(station){
-        station.timeseries.data = station.timeseries.data.map(makeNum);
-        map.addSource(station.id, {
-            "type": "geojson",
-            "data": station.feature
-        });
 
-        map.addLayer({
-            "id": station.id,
-            "type": "circle",
-            "source": station.id,
-            "layout": {
-              "visibility": "visible"
-            },
-            "paint": {
-                "circle-radius": 5,
-                "circle-color": "#f00" // Color our circle red.
-            }
-        });
-        station.visible = true;
-      });
+GeoMultiple.prototype.addStationLayer = function() {
+  var self = this;
+  var config = this.config;
+  var map = this.map;
+  var stations = this.stations = {};
 
-      config.stickoxide.summary.timeseries.data = config.stickoxide.summary.timeseries.data.map(makeNum);
-      self.summarySparkLine(d3.select(self.node).select(".city-sparkline"), config.stickoxide.summary.timeseries);
+  if (config.stickoxide !== undefined) {
+    config.stickoxide.stations.forEach(function(station){
+      station.timeseries.data = station.timeseries.data.map(makeNum);
 
-      self.config.dispatcher.on("datechange.stations-" + self.config.id, function(date) {
-          self.updateDate(date);
-      });
+      var pos = station.feature.geometry.coordinates.reverse();
+      station.visible = true;
+      stations[station.id] = L.circleMarker(pos, {
+        radius: 5,
+        fillColor: colorScale(0),
+        color: colorScale(0),
+      }).addTo(map);
+    });
 
-      self.config.dispatcher.datechange(new Date(config.stickoxide.stations[0].timeseries.start));
-    }
+    config.stickoxide.summary.timeseries.data = config.stickoxide.summary.timeseries.data.map(makeNum);
+    self.summarySparkLine(d3.select(self.node).select(".city-sparkline"), config.stickoxide.summary.timeseries);
 
-  });
+    self.config.dispatcher.on("datechange.stations-" + self.config.id, function(date) {
+        self.updateDate(date);
+    });
+
+    self.config.dispatcher.datechange(new Date(config.stickoxide.stations[0].timeseries.start));
+  }
 };
 
 GeoMultiple.prototype.updateDate = function(date) {
@@ -379,15 +86,19 @@ GeoMultiple.prototype.updateDate = function(date) {
 
     if (!val && val !== 0.0) {
       if (station.visible) {
-        self.map.setLayoutProperty(station.id, "visibility", "none");
+        self.map.removeLayer(self.stations[station.id]);
         station.visible = false;
       }
     } else {
       if (!station.visible) {
-        self.map.setLayoutProperty(station.id, "visibility", "visible");
+        self.map.addLayer(self.stations[station.id]);
         station.visible = true;
       }
-      self.map.setPaintProperty(station.id, "circle-color", colorScale(val));
+      self.stations[station.id].setStyle({
+        fillColor: colorScale(val),
+        color: colorScale(val),
+        opacity: 0.9
+      });
     }
   });
 };
