@@ -27,35 +27,14 @@
 <script src="static/js/geomultiples.js" charset="utf-8"></script>
 <script>
 
-var dispatcher = d3.dispatch("datechangeRequest", "datechange");
+
 var cities = {{ site.data.cities|jsonify }};
-var umweltzonen = {{ site.data.umweltzonen|jsonify }};
 var stickoxide = {{ site.data.stickoxide|jsonify }};
 cities.forEach(function(city){
-  var uz = umweltzonen.features.filter(function(f, i){
-    if (f.properties.city === city.id) {
-      return true;
-    }
-    return false;
-  })
-  city.umweltzone = uz[0];
   city.stickoxide = stickoxide[city.id];
-  city.dispatcher = dispatcher;
   new GeoMultiple(document.getElementById(city.id), city);
 });
 
-requestedAnimationFrame = null;
-dispatcher.on("datechangeRequest", function(date) {
-  if (requestedAnimationFrame) {
-    window.cancelAnimationFrame(requestedAnimationFrame);
-  }
-  requestedAnimationFrame = window.requestAnimationFrame((function(date, fr){
-    return function() {
-      requestedAnimationFrame = null;
-      dispatcher.datechange(date);
-    };
-  }(date, requestedAnimationFrame)));
-});
 
 
 </script>
