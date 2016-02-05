@@ -52,6 +52,7 @@ GeoMultiple.prototype.addStationLayer = function() {
   var config = this.config;
   var map = this.map;
   var stations = this.stations = {};
+  var popups = this.popups = {};
 
   if (config.stickoxide !== undefined) {
     config.stickoxide.stations.forEach(function(station){
@@ -59,21 +60,23 @@ GeoMultiple.prototype.addStationLayer = function() {
 
       var pos = station.feature.geometry.coordinates.reverse();
       station.visible = true;
+      popups[station.id] = L.popup();
       stations[station.id] = L.circleMarker(pos, {
         radius: 5,
         fillColor: colorScale(0),
         color: colorScale(0),
-      }).addTo(map);
+      }).bindPopup(popups[station.id])
+        .addTo(map);
     });
 
     config.stickoxide.summary.timeseries.data = config.stickoxide.summary.timeseries.data.map(makeNum);
     self.summarySparkLine(d3.select(self.node).select(".city-sparkline"), config.stickoxide.summary.timeseries);
 
-    self.config.dispatcher.on("datechange.stations-" + self.config.id, function(date) {
+    GeoMultiple.dispatcher.on("datechange.stations-" + self.config.id, function(date) {
         self.updateDate(date);
     });
 
-    self.config.dispatcher.datechange(new Date(config.stickoxide.stations[0].timeseries.start));
+    GeoMultiple.dispatcher.datechange(new Date(config.stickoxide.stations[0].timeseries.start));
   }
 };
 
@@ -86,6 +89,7 @@ GeoMultiple.prototype.updateDate = function(date) {
 
     if (!val && val !== 0.0) {
       if (station.visible) {
+        self.stations[station.id].closePopup();
         self.map.removeLayer(self.stations[station.id]);
         station.visible = false;
       }
@@ -94,10 +98,12 @@ GeoMultiple.prototype.updateDate = function(date) {
         self.map.addLayer(self.stations[station.id]);
         station.visible = true;
       }
+      self.popups[station.id].setContent('<strong>' + val + ' µg/m<sup>3</sup></strong><br/>' + station.feature.properties.name);
       self.stations[station.id].setStyle({
         fillColor: colorScale(val),
         color: colorScale(val),
-        opacity: 0.9
+        opacity: 0.9,
+        fillOpacity: 0.8
       });
     }
   });
@@ -163,10 +169,10 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
       .on("mousemove", function() { // mouse moving over canvas
         var xCoor = d3.mouse(this)[0]; // mouse position in x
         var xDate = x.invert(xCoor); // date corresponding to mouse x
-        self.config.dispatcher.datechangeRequest(xDate);
+        GeoMultiple.dispatcher.datechangeRequest(xDate);
       });
 
-      this.config.dispatcher.on("datechange.sparkline-" + this.config.id, function(date) {
+      GeoMultiple.dispatcher.on("datechange.sparkline-" + this.config.id, function(date) {
         var yRange = y.range();
         mouseLine.style("opacity", "1")
           .attr("d", function(){
@@ -175,6 +181,21 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
       });
 
 };
+
+var requestedAnimationFrame = null;
+GeoMultiple.dispatcher = d3.dispatch("datechangeRequest", "datechange");
+GeoMultiple.dispatcher.on("datechangeRequest", function(date) {
+  if (requestedAnimationFrame) {
+    window.cancelAnimationFrame(requestedAnimationFrame);
+  }
+  requestedAnimationFrame = window.requestAnimationFrame((function(date, fr){
+    return function() {
+      requestedAnimationFrame = null;
+      GeoMultiple.dispatcher.datechange(date);
+    };
+  }(date, requestedAnimationFrame)));
+});
+
 
 return GeoMultiple;
 
