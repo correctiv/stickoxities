@@ -23,6 +23,34 @@
     "stationIds": ["DEHH001", "DEHH002", "DEHH003", "DEHH004", "DEHH005", "DEHH006", "DEHH007", "DEHH008", "DEHH009", "DEHH010", "DEHH011", "DEHH012", "DEHH013", "DEHH014", "DEHH015", "DEHH016", "DEHH017", "DEHH018", "DEHH019", "DEHH020", "DEHH021", "DEHH022", "DEHH023", "DEHH024", "DEHH025", "DEHH026", "DEHH027", "DEHH028", "DEHH029", "DEHH030", "DEHH031", "DEHH032", "DEHH033", "DEHH034", "DEHH035", "DEHH036", "DEHH037", "DEHH038", "DEHH039", "DEHH040", "DEHH041", "DEHH042", "DEHH043", "DEHH044", "DEHH045", "DEHH046", "DEHH047", "DEHH048", "DEHH049", "DEHH050", "DEHH051", "DEHH052", "DEHH053", "DEHH054", "DEHH055", "DEHH056", "DEHH057", "DEHH058", "DEHH059", "DEHH060", "DEHH061", "DEHH062", "DEHH063", "DEHH064", "DEHH065", "DEHH066", "DEHH067", "DEHH068", "DEHH069", "DEHH070", "DEHH071", "DEHH072", "DEHH073", "DEHH074", "DEHH075", "DEHH076", "DEHH077", "DEHH078", "DEHH079", "DEHH080"]
   },
   {
+    "id": "muenster",
+    "name": "Münster",
+    "center": [7.6235, 51.9558],
+    "zoom": 10,
+    "ags": ["55150"]
+  },
+  {
+    "id": "dortmund",
+    "name": "Dortmund",
+    "center": [7.4729, 51.5125],
+    "zoom": 10,
+    "ags": ["59130"]
+  },
+  {
+    "id": "essen",
+    "name": "Essen",
+    "center": [7.0100, 51.4575],
+    "zoom": 10,
+    "ags": ["51130"]
+  },
+  {
+    "id": "koeln",
+    "name": "Köln",
+    "center": [6.9609, 50.9357],
+    "zoom": 10,
+    "ags": ["53150"]
+  },
+  {
     "id": "muenchen",
     "name": "München",
     "center": [11.575556, 48.137222],
