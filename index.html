@@ -17,10 +17,19 @@
   <h3>{{ city.name }}</h3>
   <div class="city-map">
   </div>
-  <div class="city-sparkline"></div>
+  <div class="city-sparkline">
+    <h4>{{ city.stationLabel }}</h4>
+  </div>
 </div>
 {% endfor %}
 </div>
+
+<footer class="footer">
+  <p>
+    Angaben in µg/m<sup>3</sup>,
+    © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://cartodb.com/attributions">CartoDB attributions</a>
+  </p>
+</footer>
 
 <script src="static/js/vendor/leaflet/dist/leaflet.js"></script>
 <script src="static/js/vendor/d3/d3.min.js"></script>

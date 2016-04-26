@@ -4,6 +4,10 @@ body {
   font-family: sans-serif;
 }
 
+text {
+  text-rendering: optimizeLegibility;
+}
+
 .cities {
   display: flex;
   flex-wrap: wrap;
@@ -20,6 +24,11 @@ body {
   min-height: 200px;
 }
 
+.city-sparkline h4 {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #363636;
+}
 
 .sparkline {
   fill: none;
@@ -27,9 +36,24 @@ body {
   stroke-width: 0.66px;
 }
 
+.sparkline-legend {
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+.sparkline-legend-limit {
+  fill: #b31919;
+}
+
 .limitline {
   fill: none;
-  stroke: #f00;
+  stroke: #b31919;
+  stroke-width: 1px;
+}
+
+.zeroline {
+  fill: none;
+  stroke: #7d7d7d;
   stroke-width: 1px;
 }
 
@@ -54,4 +78,10 @@ body {
   stroke: #333;
   stroke-width: 1px;
   fill: none;
+}
+
+.footer {
+  text-align: right;
+  font-size: 10px;
+  margin: 0 10px;
 }

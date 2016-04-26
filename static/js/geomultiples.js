@@ -8,7 +8,12 @@ var makeNum = function(d){
 };
 
 var colorbrewer = {
-  OrRd: ['rgb(255,247,236)','rgb(254,232,200)','rgb(253,212,158)','rgb(253,187,132)','rgb(252,141,89)','rgb(239,101,72)','rgb(215,48,31)','rgb(179,0,0)','rgb(127,0,0)']
+  OrRd: [
+    'rgb(255,247,236)','rgb(254,232,200)',
+    'rgb(253,212,158)',
+    'rgb(253,187,132)','rgb(252,141,89)','rgb(239,101,72)',
+    'rgb(215,48,31)','rgb(179,0,0)','rgb(127,0,0)'
+  ]
 };
 
 var getScaleDate = function(timeseries) {
@@ -18,7 +23,7 @@ var getScaleDate = function(timeseries) {
   };
 };
 
-var maxValue = 100;
+var maxValue = 130;
 var limitValue = 40;
 
 var colorScale = d3.scale.quantize().domain([0, maxValue]).range(colorbrewer.OrRd);
@@ -65,6 +70,7 @@ GeoMultiple.prototype.addStationLayer = function() {
         radius: 5,
         fillColor: colorScale(0),
         color: colorScale(0),
+        weight: 1.5,
       }).bindPopup(popups[station.id])
         .addTo(map);
     });
@@ -98,12 +104,12 @@ GeoMultiple.prototype.updateDate = function(date) {
         self.map.addLayer(self.stations[station.id]);
         station.visible = true;
       }
-      self.popups[station.id].setContent('<strong>' + val + ' µg/m<sup>3</sup></strong><br/>' + station.feature.properties.name);
+      self.popups[station.id].setContent('<strong>' + val + ' µg/m<sup>3</sup></strong><br/>' + station.feature.properties.street);
       self.stations[station.id].setStyle({
         fillColor: colorScale(val),
-        color: colorScale(val),
+        color: station.feature.properties.Typ === 'Verkehr' ? '#000': colorScale(val),
         opacity: 0.9,
-        fillOpacity: 0.8
+        fillOpacity: 0.8,
       });
     }
   });
@@ -111,11 +117,13 @@ GeoMultiple.prototype.updateDate = function(date) {
 
 GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
   var self = this;
+  var rightBuffer = 15;
   var width = this.width;
+  var legendFontSize = 10;
   var height = 70;
   var bottomBuffer = 20;
   var x = d3.time.scale()
-          .range([0, width])
+          .range([0, width - rightBuffer])
           .domain([new Date(timeseries.start), new Date(timeseries.end)]);
   var y = d3.scale.linear()
         .range([height - bottomBuffer, 0])
@@ -134,12 +142,36 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
        .ticks(5);
 
    var limitLine = d3.svg.line().x(function(d){ return x(d); }).y(y(limitValue));
+   var zeroLine = d3.svg.line().x(function(d){ return x(d); }).y(y(0));
 
-   var sparkLine = node
+   var sparkLineSvg = node
      .append("svg")
      .attr("width", width)
      .attr("height", height)
      .append("g");
+   sparkLineSvg
+    .append('text')
+      .attr("class", "sparkline-legend")
+      .attr('text-anchor', "end")
+      .attr('width', rightBuffer)
+      .attr("x", rightBuffer - 2)
+      .attr("y", height - bottomBuffer)
+      .text('0');
+
+    sparkLineSvg
+     .append('text')
+       .attr("class", "sparkline-legend sparkline-legend-limit")
+       .attr('text-anchor', "end")
+       .attr('width', rightBuffer)
+       .attr("x", rightBuffer - 2)
+       .attr("y", (height) - y(limitValue))
+       .text('40');
+
+   var sparkLine = sparkLineSvg
+      .append('g')
+      .attr("width", width - rightBuffer)
+      .attr("height", height)
+      .attr("transform", "translate(" + rightBuffer + ",0)")
    sparkLine.append("path")
       .datum(timeseries.data)
       .attr("class", "sparkline")
@@ -148,9 +180,13 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
       .datum(x.domain())
       .attr("class", "limitline")
       .attr("d", limitLine);
+    sparkLine.append("path")
+      .datum(x.domain())
+      .attr("class", "zeroline")
+      .attr("d", zeroLine);
     sparkLine.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height - bottomBuffer) + ")")
+        .attr("transform", "translate(" + rightBuffer + "," + (height - bottomBuffer) + ")")
         .call(xAxis);
 
     var mouseLine = sparkLine.append("path") // this is the black vertical line to follow mouse
@@ -159,7 +195,7 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
     // var bisect = d3.bisector(function(d) { return d.YEAR; }).right; // reusable bisect to find points before/after line
 
     sparkLine.append("svg:rect") // append a rect to catch mouse movements on canvas
-      .attr("width", width) // can"t catch mouse events on a g element
+      .attr("width", width - rightBuffer) // can"t catch mouse events on a g element
       .attr("height", height)
       .style("fill", "none")
       .style("pointer-events", "all")
