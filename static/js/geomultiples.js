@@ -107,7 +107,8 @@ GeoMultiple.prototype.updateDate = function(date) {
       self.popups[station.id].setContent('<strong>' + val + ' µg/m<sup>3</sup></strong><br/>' + station.feature.properties.street);
       self.stations[station.id].setStyle({
         fillColor: colorScale(val),
-        color: station.feature.properties.Typ === 'Verkehr' ? '#000': colorScale(val),
+        color: station.id == self.config.station ? '#000' : (
+            station.feature.properties.Typ === 'Verkehr' ? '#666': colorScale(val)),
         opacity: 0.9,
         fillOpacity: 0.8,
       });
@@ -138,8 +139,7 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
 
    var xAxis = d3.svg.axis()
        .scale(x)
-       .orient("bottom")
-       .ticks(5);
+       .orient("bottom");
 
    var limitLine = d3.svg.line().x(function(d){ return x(d); }).y(y(limitValue));
    var zeroLine = d3.svg.line().x(function(d){ return x(d); }).y(y(0));
@@ -186,7 +186,7 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
       .attr("d", zeroLine);
     sparkLine.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + rightBuffer + "," + (height - bottomBuffer) + ")")
+        .attr("transform", "translate(" + 0 + "," + (height - bottomBuffer) + ")")
         .call(xAxis);
 
     var mouseLine = sparkLine.append("path") // this is the black vertical line to follow mouse
