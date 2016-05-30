@@ -1,86 +1,84 @@
-body {
-  margin:0;
-  padding:0;
+.stickoxities  {
   font-family: sans-serif;
 }
 
-text {
+.stickoxities text {
   text-rendering: optimizeLegibility;
 }
 
-.cities {
+.stickoxities .cities {
   display: flex;
   flex-wrap: wrap;
 }
 
-.city {
+.stickoxities .city {
   flex: 0 1 auto;
   align-self: stretch;
   margin: 15px;
 }
 
-.city-map {
+.stickoxities .city-map {
   min-width: 300px;
   min-height: 200px;
 }
 
-.city-sparkline h4 {
+.stickoxities .city-sparkline h4 {
   margin: 10px 0 0;
   font-size: 14px;
   color: #363636;
 }
 
-.sparkline {
+.stickoxities .sparkline {
   fill: none;
   stroke: #000;
   stroke-width: 0.66px;
 }
 
-.sparkline-legend {
+.stickoxities .sparkline-legend {
   font-size: 10px;
   font-family: sans-serif;
 }
 
-.sparkline-legend-limit {
+.stickoxities .sparkline-legend-limit {
   fill: #b31919;
 }
 
-.limitline {
+.stickoxities .limitline {
   fill: none;
   stroke: #b31919;
   stroke-width: 1px;
 }
 
-.zeroline {
+.stickoxities .zeroline {
   fill: none;
   stroke: #7d7d7d;
   stroke-width: 1px;
 }
 
-.x.axis .domain {
+.stickoxities .x.axis .domain {
   stroke-width: 0px;
   stroke: none;
   fill: none;
 }
 
-.x.axis .tick line {
+.stickoxities .x.axis .tick line {
   stroke-width: 1px;
   stroke: #000;
 }
 
-.x.axis .tick text {
+.stickoxities .x.axis .tick text {
   font-size: 10px;
   font-family: sans-serif;
 }
 
-.mouseline {
+.stickoxities .mouseline {
   opacity: 0;
   stroke: #333;
   stroke-width: 1px;
   fill: none;
 }
 
-.footer {
+.stickoxities .footer {
   text-align: right;
   font-size: 10px;
   margin: 0 10px;

@@ -11,39 +11,41 @@
 </head>
 <body>
 
-<div class="cities">
-{% for city in site.data.cities %}
-<div class="city" id="{{ city.id }}">
-  <h3>{{ city.name }}</h3>
-  <div class="city-map">
+<div class="stickoxities">
+  <div class="cities">
+  {% for city in site.data.cities %}
+  <div class="city" id="stickoxities-{{ city.id }}">
+    <h3>{{ city.name }}</h3>
+    <div class="city-map">
+    </div>
+    <div class="city-sparkline">
+      <h4>{{ city.stationLabel }}</h4>
+    </div>
   </div>
-  <div class="city-sparkline">
-    <h4>{{ city.stationLabel }}</h4>
+  {% endfor %}
   </div>
-</div>
-{% endfor %}
-</div>
 
-<footer class="footer">
-  <p>
-    Angaben in µg/m<sup>3</sup>,
-    © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://cartodb.com/attributions">CartoDB attributions</a>
-  </p>
-</footer>
+  <footer class="footer">
+    <p>
+      Daten vom Umweltbundesamt, Stickoxid-Angaben in µg/m<sup>3</sup>,
+      © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://cartodb.com/attributions">CartoDB attributions</a>
+    </p>
+  </footer>
+</div>
 
 <script src="static/js/vendor/leaflet/dist/leaflet.js"></script>
 <script src="static/js/vendor/d3/d3.min.js"></script>
 <script src="static/js/geomultiples.js" charset="utf-8"></script>
 <script>
 
-
+(function(){
 var cities = {{ site.data.cities|jsonify }};
 var stickoxide = {{ site.data.stickoxide|jsonify }};
 cities.forEach(function(city){
   city.stickoxide = stickoxide[city.id];
-  new GeoMultiple(document.getElementById(city.id), city);
+  new GeoMultiple(document.getElementById('stickoxities-' + city.id), city);
 });
-
+}());
 
 
 </script>
