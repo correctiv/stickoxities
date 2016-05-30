@@ -25,6 +25,7 @@ var getScaleDate = function(timeseries) {
 
 var maxValue = 130;
 var limitValue = 40;
+var maxDate = new Date('Thu Dec 17 2015 22:28:01 GMT+0100');
 
 var colorScale = d3.scale.quantize().domain([0, maxValue]).range(colorbrewer.OrRd);
 
@@ -33,6 +34,7 @@ var GeoMultiple = function(node, config) {
   this.node = node;
   this.width = this.node.offsetWidth;
   this.config = config;
+  this.currentDate = new Date(config.stickoxide.stations[0].timeseries.start);
 
   // https://cartodb-basemaps-c.global.ssl.fastly.net/dark_nolabels/6/18/23.png
   var baseLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
@@ -82,12 +84,16 @@ GeoMultiple.prototype.addStationLayer = function() {
         self.updateDate(date);
     });
 
-    GeoMultiple.dispatcher.datechange(new Date(config.stickoxide.stations[0].timeseries.start));
+    GeoMultiple.dispatcher.datechange(self.currentDate);
   }
 };
 
 GeoMultiple.prototype.updateDate = function(date) {
   var self = this;
+  if (date > maxDate) {
+    return;
+  }
+  self.currentDate = date;
   this.config.stickoxide.stations.forEach(function(station){
     var start = (new Date(station.timeseries.start)).getTime();
     var pivot = Math.floor((date.getTime() - start) / (1000 * station.timeseries.interval));
