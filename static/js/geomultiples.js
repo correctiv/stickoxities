@@ -194,6 +194,12 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
 
     // var bisect = d3.bisector(function(d) { return d.YEAR; }).right; // reusable bisect to find points before/after line
 
+    var sparkMove = function() { // mouse moving over canvas
+      var xCoor = d3.mouse(this)[0]; // mouse position in x
+      var xDate = x.invert(xCoor); // date corresponding to mouse x
+      GeoMultiple.dispatcher.datechangeRequest(xDate);
+    };
+
     sparkLine.append("svg:rect") // append a rect to catch mouse movements on canvas
       .attr("width", width - rightBuffer) // can"t catch mouse events on a g element
       .attr("height", height)
@@ -202,11 +208,11 @@ GeoMultiple.prototype.summarySparkLine = function(node, timeseries) {
       .on("mouseover", function(){ // on mouse in show line, circles and text
             mouseLine.style("opacity", "1");
       })
-      .on("mousemove", function() { // mouse moving over canvas
-        var xCoor = d3.mouse(this)[0]; // mouse position in x
-        var xDate = x.invert(xCoor); // date corresponding to mouse x
-        GeoMultiple.dispatcher.datechangeRequest(xDate);
-      });
+      .on("mousemove", sparkMove)
+      .on("touchstart", sparkMove)
+      .on("touchmove", sparkMove)
+      .on("touchend", sparkMove);
+
 
       GeoMultiple.dispatcher.on("datechange.sparkline-" + this.config.id, function(date) {
         var yRange = y.range();
